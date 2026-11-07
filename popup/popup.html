@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Block AI Slop</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="top">
+    <img class="logo" src="../icons/icon48.png" width="32" height="32" alt="">
+    <div class="brand">
+      <h1>Block AI Slop</h1>
+      <p id="status">On</p>
+    </div>
+    <label class="switch" title="Turn Block AI Slop on or off">
+      <input type="checkbox" id="enabled" aria-label="Enable Block AI Slop">
+      <span class="track" aria-hidden="true"></span>
+    </label>
+  </header>
+
+  <main id="controls">
+    <section class="stats" aria-label="Stats">
+      <div class="stat">
+        <strong id="page-count">0</strong>
+        <span>hidden on this page</span>
+      </div>
+      <div class="stat">
+        <strong id="total-count">0</strong>
+        <span>hidden all time</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>When a comment looks AI-written</h2>
+      <div class="segmented" role="radiogroup" aria-label="Action">
+        <label><input type="radio" name="mode" value="replace"><span>Show a notice</span></label>
+        <label><input type="radio" name="mode" value="hide"><span>Hide it</span></label>
+      </div>
+      <p class="hint">Replies underneath always stay visible.</p>
+    </section>
+
+    <section>
+      <h2>Look for</h2>
+      <label class="row">
+        <span class="row-text"><b>Em dashes</b><small>The &ldquo;&mdash;&rdquo; nobody types by hand</small></span>
+        <input type="checkbox" data-rule="emDash">
+      </label>
+      <label class="row">
+        <span class="row-text"><b>Stock AI phrases</b><small>&ldquo;As an AI language model&rdquo; and friends</small></span>
+        <input type="checkbox" data-rule="phrases">
+      </label>
+    </section>
+
+    <section>
+      <h2>Sites</h2>
+      <div id="sites"></div>
+    </section>
+  </main>
+
+  <footer>
+    <a href="https://blockaislop.app" target="_blank" rel="noopener">blockaislop.app</a>
+    <span aria-hidden="true">&middot;</span>
+    <a href="https://github.com/andrewtvuong/block-ai-slop" target="_blank" rel="noopener">GitHub</a>
+    <span aria-hidden="true">&middot;</span>
+    <span id="version"></span>
+  </footer>
+
+  <script src="../src/settings.js"></script>
+  <script src="../src/sites.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

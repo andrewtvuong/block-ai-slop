@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Block AI Slop: DOM harness</title>
+  <style>
+    body { font: 14px/1.5 system-ui, sans-serif; margin: 24px; max-width: 760px; }
+    h1 { font-size: 20px; }
+    #summary { font-weight: 700; font-size: 18px; }
+    .pass { color: #187a3a; }
+    .fail { color: #c8261c; }
+    table { border-collapse: collapse; width: 100%; margin-top: 12px; }
+    td, th { text-align: left; padding: 4px 8px; border-bottom: 1px solid #ddd; }
+    iframe { display: none; }
+  </style>
+</head>
+<body>
+  <h1>Block AI Slop: content script harness</h1>
+  <p>Runs <code>src/content.js</code> against simplified copies of each site's comment markup. Open this file in Chrome.</p>
+  <p id="summary">Running&hellip;</p>
+  <table><thead><tr><th>Site</th><th>Check</th><th>Result</th></tr></thead><tbody id="rows"></tbody></table>
+  <script>
+    const sites = ['youtube', 'x', 'facebook', 'instagram', 'linkedin'];
+    const done = {};
+    let failed = 0, total = 0;
+    addEventListener('message', (e) => {
+      const { site, results } = e.data || {};
+      if (!site || done[site]) return;
+      done[site] = true;
+      for (const r of results) {
+        total++;
+        if (!r.pass) failed++;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${site}</td><td></td><td class="${r.pass ? 'pass' : 'fail'}">${r.pass ? 'PASS' : 'FAIL'}</td>`;
+        tr.children[1].textContent = r.name;
+        document.getElementById('rows').append(tr);
+      }
+      if (Object.keys(done).length === sites.length) {
+        const s = document.getElementById('summary');
+        s.textContent = failed ? `FAIL: ${failed} of ${total} checks failed` : `PASS: all ${total} checks passed`;
+        s.className = failed ? 'fail' : 'pass';
+        document.title = s.textContent;
+      }
+    });
+    for (const site of sites) {
+      const f = document.createElement('iframe');
+      f.src = 'frame.html?site=' + site;
+      document.body.append(f);
+    }
+  </script>
+</body>
+</html>
